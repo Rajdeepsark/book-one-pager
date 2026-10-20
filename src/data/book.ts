@@ -4,7 +4,6 @@ import assamTribuneLogo from '../assets/press/assam-tribune.png';
 import dainikJanambhumiLogo from '../assets/press/dainik-janambhumi.png';
 import niyomiyaBartaLogo from '../assets/press/niyomiya-barta.png';
 // SAMPLE assets for the client presentation (stock photo from Pexels, real institutions' logos) — replace before launch
-import sampleAmazon from '../assets/sample/amazon.png';
 import sampleAuthorPortrait from '../assets/sample/author-portrait.jpg';
 import sampleCottonUniversity from '../assets/sample/cotton-university.png';
 import sampleDibrugarhUniversity from '../assets/sample/dibrugarh-university.png';
@@ -110,17 +109,16 @@ export interface PurchaseOption {
   format: 'ebook' | 'paperback';
   heading: string;
   details: string;
-  cta: Link;
-  /** Small reassurance line under the button. */
-  note?: string;
-  /** Text link under the button. */
+  /** One button per store or format; the first is the main button. */
+  ctas: Link[];
+  /** Text link under the buttons. */
   link?: Link;
 }
 
 export interface PurchaseContent {
   heading: string;
   options: PurchaseOption[];
-  availability: { label: string; stores: PressOutlet[]; rating: string; reviewCount: string };
+  rating: { value: string; reviewCount: string };
 }
 
 export interface FaqContent {
@@ -129,6 +127,14 @@ export interface FaqContent {
   description: string;
   /** The first question starts open. */
   items: { question: string; answer: string }[];
+}
+
+export interface NavContent {
+  /** Book or publisher logo; until set, a small cover and the book title show. */
+  logo?: ImageMetadata;
+  /** In-page links: each href is a section id, e.g. '#faq'. */
+  links: Link[];
+  cta: Link;
 }
 
 export interface FooterContent {
@@ -166,6 +172,7 @@ export interface Book {
   aboutAuthor: AuthorContent;
   purchase: PurchaseContent;
   faq: FaqContent;
+  nav: NavContent;
   footer: FooterContent;
   /** Used by every "preview" button. */
   previewUrl: string;
@@ -280,32 +287,25 @@ export const book: Book = {
       signOff: 'Warm regards,',
     },
   },
-  // Replace each '#buy' with the real store or checkout link
+  // Replace each '#buy' with the real Kindle and Flipkart links
   purchase: {
     heading: 'Order the book',
     options: [
       {
         format: 'ebook',
         heading: 'eBook',
-        details: '[PDF, EPUB, KINDLE]',
-        cta: { label: 'Buy for [PRICE]', href: '#buy' },
-        note: '[GUARANTEE / INSTANT ACCESS DETAILS]',
+        details: 'Read it on Kindle.',
+        ctas: [{ label: 'Buy on Kindle', href: '#buy' }],
       },
       {
         format: 'paperback',
         heading: 'Paperback',
-        details: '[WORLDWIDE SHIPPING / AVAILABILITY]',
-        cta: { label: 'Buy on [BOOKSTORE]', href: '#buy' },
+        details: 'Pan-India shipping via Flipkart.',
+        ctas: [{ label: 'Buy on Flipkart', href: '#buy' }],
         link: { label: 'Free preview', href: previewUrl },
       },
     ],
-    availability: {
-      label: 'Paperback is also available on',
-      // SAMPLE: Amazon's logo for the client presentation — list only stores that actually stock the book
-      stores: [{ name: 'Amazon', logo: sampleAmazon }, { name: '[LOCAL BOOKSTORE]' }, { name: '[ASSAMESE PUBLISHER]' }],
-      rating: '[STAR RATING]',
-      reviewCount: '[NUMBER OF REVIEWS]',
-    },
+    rating: { value: '[STAR RATING]', reviewCount: '[NUMBER OF REVIEWS]' },
   },
   faq: {
     eyebrow: 'Got questions?',
@@ -315,6 +315,16 @@ export const book: Book = {
       const n = String(i + 1).padStart(2, '0');
       return { question: `[FAQ QUESTION ${n}]`, answer: `[ANSWER ${n} — ONE OR TWO SHORT, CLEAR SENTENCES.]` };
     }),
+  },
+  nav: {
+    links: [
+      { label: 'About the book', href: '#film' },
+      { label: 'What’s inside', href: '#inside' },
+      { label: 'Reviews', href: '#press' },
+      { label: 'Author', href: '#author' },
+      { label: 'FAQ', href: '#faq' },
+    ],
+    cta: { label: 'Buy now', href: '#buy' },
   },
   footer: {
     brand: '[AUTHOR / PUBLISHER]',

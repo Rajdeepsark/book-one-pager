@@ -15,7 +15,8 @@ const { title, description, lang = 'en' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<!-- Scroll padding keeps in-page link targets clear of the sticky navigation -->
+<html lang={lang} class="scroll-pt-20 motion-safe:scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

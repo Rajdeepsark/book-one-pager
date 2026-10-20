@@ -19,22 +19,26 @@ const { content } = Astro.props;
     />
 
     <!-- Native disclosure rows: work without JavaScript and answers are searchable with find-in-page -->
-    <div class="mx-auto mt-12 max-w-212 border-t border-border sm:mt-14">
+    <!-- One white card; dividers are inset from its edges and the last row has none -->
+    <div class="mx-auto mt-12 max-w-212 rounded-2xl border border-border bg-surface px-5 sm:mt-14 sm:px-6">
       {
         content.items.map((item, i) => (
-          <details open={i === 0} class="faq-item group border-b border-border">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 rounded-sm py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:py-6 [&::-webkit-details-marker]:hidden">
-              <span class="text-[17px] leading-snug font-bold tracking-[-0.02em] sm:text-lg">{item.question}</span>
-              <span
+          <details open={i === 0} class="faq-item group border-b border-border last:border-0">
+            <summary class="flex cursor-pointer list-none items-center gap-4 rounded-sm py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:gap-5 [&::-webkit-details-marker]:hidden">
+              <svg
+                viewBox="0 0 16 16"
+                class="size-4 shrink-0 text-muted transition-[rotate,color] duration-300 group-hover:text-secondary group-open:rotate-45 group-open:text-primary motion-reduce:transition-none"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
                 aria-hidden="true"
-                class="grid size-8 shrink-0 place-items-center rounded-full border border-border text-secondary transition-[rotate,color,background-color,border-color] duration-300 group-hover:text-main group-open:rotate-45 group-open:border-primary/30 group-open:bg-primary/10 group-open:text-primary motion-reduce:transition-none"
               >
-                <svg viewBox="0 0 16 16" class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                  <path d="M8 2.5v11M2.5 8h11" />
-                </svg>
-              </span>
+                <path d="M8 1.5v13M1.5 8h13" />
+              </svg>
+              <span class="text-[15px] leading-snug font-semibold tracking-[-0.01em] sm:text-base">{item.question}</span>
             </summary>
-            <p class="pr-14 pb-6 text-[15px] leading-relaxed text-secondary sm:text-base">{item.answer}</p>
+            <p class="pb-5 pl-8 text-[15px] leading-relaxed text-secondary sm:pl-9">{item.answer}</p>
           </details>
         ))
       }

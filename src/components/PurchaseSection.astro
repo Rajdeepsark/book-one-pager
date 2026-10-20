@@ -2,10 +2,8 @@
 import type { Book, PurchaseContent } from '../data/book';
 import Book3D from './Book3D.astro';
 import Button from './Button.astro';
-import CheckIcon from './CheckIcon.astro';
 import CoverArt from './CoverArt.astro';
 import DeviceMockup from './DeviceMockup.astro';
-import PressLogos from './PressLogos.astro';
 import ReaderScreen from './ReaderScreen.astro';
 import SectionIntro from './SectionIntro.astro';
 import StarRating from './StarRating.astro';
@@ -17,7 +15,7 @@ interface Props {
 }
 
 const { content, book } = Astro.props;
-const { availability } = content;
+const { rating } = content;
 const cover = {
   title: book.title,
   titleLang: book.titleLang,
@@ -26,11 +24,11 @@ const cover = {
   coverTitleLines: book.coverTitleLines,
 };
 // Placeholder ratings show five stars
-const stars = Math.round(Number.parseFloat(availability.rating)) || 5;
+const stars = Math.round(Number.parseFloat(rating.value)) || 5;
 const cardClass = 'group rounded-2xl border border-border bg-surface-secondary/60';
 ---
 
-<section id="buy" aria-labelledby="buy-title" class="relative z-10 scroll-mt-8 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-28">
+<section id="buy" aria-labelledby="buy-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-28">
   <div class="mx-auto max-w-page">
     <SectionIntro id="buy-title" headline={content.heading} />
 
@@ -58,15 +56,19 @@ const cardClass = 'group rounded-2xl border border-border bg-surface-secondary/6
             </div>
             <h3 class="mt-8 text-2xl font-extrabold tracking-[-0.03em]">{option.heading}</h3>
             <p class="mt-1 text-[15px] text-secondary">{option.details}</p>
-            <Button href={option.cta.href} class="mt-6 w-full max-w-xs">
-              {option.cta.label}
-            </Button>
-            {option.note && (
-              <p class="mt-4 flex items-center gap-1.5 text-sm text-secondary">
-                <CheckIcon class="size-4 text-muted" />
-                {option.note}
-              </p>
-            )}
+            <!-- Several buttons stack while the card is narrow and sit side by side once there's room -->
+            <div
+              class:list={[
+                'mt-6 grid w-full gap-3',
+                option.ctas.length > 1 ? 'max-w-md sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2' : 'max-w-xs',
+              ]}
+            >
+              {option.ctas.map((cta, i) => (
+                <Button href={cta.href} variant={i === 0 ? 'primary' : 'secondary'} class="w-full">
+                  {cta.label}
+                </Button>
+              ))}
+            </div>
             {option.link && (
               <a
                 href={option.link.href}
@@ -80,14 +82,9 @@ const cardClass = 'group rounded-2xl border border-border bg-surface-secondary/6
       }
     </div>
 
-    <!-- Where else to buy -->
-    <div class="mt-14 text-center">
-      <p class="text-[15px] text-secondary">{availability.label}</p>
-      <PressLogos outlets={availability.stores} class="mt-4 justify-center gap-x-8 gap-y-3 text-muted" />
-      <div class="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-secondary">
-        <StarRating rating={stars} decorative size="size-4" class="gap-0.5" />
-        <span>{availability.rating} · {availability.reviewCount} reviews</span>
-      </div>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-secondary">
+      <StarRating rating={stars} decorative size="size-4" class="gap-0.5" />
+      <span>{rating.value} · {rating.reviewCount} reviews</span>
     </div>
   </div>
 </section>

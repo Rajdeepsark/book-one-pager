@@ -6,12 +6,14 @@ import InsideBookSection from '../components/InsideBookSection.astro';
 import PressSection from '../components/PressSection.astro';
 import PurchaseSection from '../components/PurchaseSection.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import VideoSection from '../components/VideoSection.astro';
 import { book } from '../data/book';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title={`${book.title} — ${book.author}`} description={book.description}>
+  <SiteHeader book={book} />
   <main>
     <Hero book={book} />
     <PressSection coverage={book.pressCoverage} />
