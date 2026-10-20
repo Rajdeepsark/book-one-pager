@@ -1,0 +1,25 @@
+---
+import AuthorSection from '../components/AuthorSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import Hero from '../components/Hero.astro';
+import InsideBookSection from '../components/InsideBookSection.astro';
+import PressSection from '../components/PressSection.astro';
+import PurchaseSection from '../components/PurchaseSection.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import VideoSection from '../components/VideoSection.astro';
+import { book } from '../data/book';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title={`${book.title} — ${book.author}`} description={book.description}>
+  <main>
+    <Hero book={book} />
+    <PressSection coverage={book.pressCoverage} />
+    <VideoSection content={book.videoSection} book={book} />
+    <InsideBookSection content={book.insideBook} previewUrl={book.previewUrl} />
+    <AuthorSection content={book.aboutAuthor} author={book.author} bookTitle={book.title} />
+    <PurchaseSection content={book.purchase} book={book} />
+    <FaqSection content={book.faq} />
+  </main>
+  <SiteFooter content={book.footer} />
+</Layout>

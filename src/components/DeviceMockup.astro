@@ -1,0 +1,33 @@
+---
+interface Props {
+  kind: 'tablet' | 'phone';
+  /** Set the width; the height follows the device's proportions. */
+  class?: string;
+}
+
+const { kind, class: className } = Astro.props;
+
+// Radii are width % / height %, so corners stay round at any size.
+// The bezel uses cqw (the device's own width) because percentage margins would follow the parent's width.
+const frame = {
+  tablet: 'aspect-[3/4] rounded-[8%/6%]',
+  phone: 'aspect-[9/19] rounded-[18%/8.5%]',
+};
+const screen = {
+  tablet: 'm-[3.5cqw] rounded-[4%/3%]',
+  phone: 'm-[5cqw] rounded-[13%/6.2%]',
+};
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    '@container grid bg-[#1d1c1b] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08),0_2px_4px_rgb(0_0_0/0.12),0_24px_40px_-18px_rgb(40_30_20/0.55)]',
+    frame[kind],
+    className,
+  ]}
+>
+  <div class:list={['@container relative overflow-hidden bg-white', screen[kind]]}>
+    <slot />
+  </div>
+</div>

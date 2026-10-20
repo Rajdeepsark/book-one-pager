@@ -1,0 +1,17 @@
+---
+// Placeholder page of text for a device screen; sizes follow the screen width
+const lines = ['w-full', 'w-[94%]', 'w-full', 'w-[88%]', 'w-[96%]', 'w-[62%]'];
+---
+
+<div class="px-[11cqw] pt-[16cqw]">
+  <span class="block h-[4.5cqw] w-3/5 rounded-full bg-[#d8d5d1]"></span>
+  {
+    [0, 1].map(() => (
+      <div class="mt-[8cqw] space-y-[4cqw]">
+        {lines.map((width) => (
+          <span class:list={['block h-[2.6cqw] rounded-full bg-[#e9e7e4]', width]} />
+        ))}
+      </div>
+    ))
+  }
+</div>

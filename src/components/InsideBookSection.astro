@@ -1,0 +1,49 @@
+---
+import type { InsideBookContent } from '../data/book';
+import CheckIcon from './CheckIcon.astro';
+import SectionIntro from './SectionIntro.astro';
+import TableOfContents from './TableOfContents.astro';
+
+interface Props {
+  content: InsideBookContent;
+  previewUrl: string;
+}
+
+const { content, previewUrl } = Astro.props;
+---
+
+<section id="inside" aria-labelledby="inside-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+  <div class="mx-auto max-w-page">
+    <!-- Takeaways: a narrow block, centred on the page -->
+    <div class="mx-auto max-w-xl">
+      <SectionIntro
+        id="inside-title"
+        align="left"
+        eyebrow={content.eyebrow}
+        headline={content.headline}
+        description={content.description}
+      />
+      <ul class="mx-auto mt-9 w-fit space-y-3.5 md:mx-0">
+        {
+          content.takeaways.map((takeaway) => (
+            <li class="flex gap-3 text-lg leading-snug font-bold tracking-[-0.02em] sm:text-xl">
+              <CheckIcon class="mt-[0.2em] size-5 text-muted" />
+              {takeaway}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 text-center text-xl leading-snug font-extrabold tracking-[-0.02em] text-primary sm:text-[22px] md:text-left">
+        {content.finalStatement}
+      </p>
+    </div>
+
+    <TableOfContents
+      class="mt-16 sm:mt-20"
+      heading={content.toc.heading}
+      ctaLabel={content.toc.ctaLabel}
+      ctaHref={previewUrl}
+      chapters={content.toc.chapters}
+    />
+  </div>
+</section>

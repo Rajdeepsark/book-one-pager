@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import type { Book, VideoSectionContent } from '../data/book';
+import Book3D from './Book3D.astro';
+import SectionIntro from './SectionIntro.astro';
+
+interface Props {
+  content: VideoSectionContent;
+  /** For the staged 3D book shown until a poster is set. */
+  book: Book;
+}
+
+const { content, book } = Astro.props;
+const { video } = content;
+---
+
+<section id="film" aria-labelledby="film-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+  <div class="mx-auto max-w-page">
+    <SectionIntro id="film-title" eyebrow={content.eyebrow} headline={content.headline} description={content.description} />
+
+    <!-- Thumbnail; the player only loads when someone presses play -->
+    <div
+      data-video
+      data-youtube-id={video.youtubeId}
+      data-src={video.src}
+      data-title={video.title}
+      class="group @container relative mx-auto mt-12 aspect-video w-full max-w-225 overflow-hidden rounded-2xl border border-border bg-[#f2eee7] shadow-[0_1px_2px_rgb(0_0_0/0.04),0_30px_60px_-36px_rgb(40_30_20/0.35)] sm:mt-14"
+    >
+      <div data-video-poster aria-hidden="true" class="absolute inset-0">
+        {
+          video.poster ? (
+            <Image
+              src={video.poster}
+              alt=""
+              widths={[900, 1800]}
+              sizes="(min-width: 960px) 900px, 100vw"
+              class="size-full object-cover"
+            />
+          ) : (
+            <Fragment>
+              {/* Staged shot: the book standing on a table against a wall, lit from the top left */}
+              <div class="absolute inset-0 bg-[linear-gradient(180deg,#f6f3ee_0%,#eee8df_62%,#e3dbce_62%,#ebe5db_100%)]" />
+              <div class="absolute inset-0 bg-[radial-gradient(70%_95%_at_16%_0%,rgb(255_255_255/0.9),rgb(255_255_255/0)_70%)]" />
+              <div class="absolute inset-0 bg-grain opacity-40 mix-blend-multiply" />
+              <div class="absolute bottom-[13%] left-[30%] -translate-x-1/2">
+                <Book3D
+                  title={book.title}
+                  titleLang={book.titleLang}
+                  author={book.author}
+                  cover={book.cover}
+                  coverTitleLines={book.coverTitleLines}
+                  class="[--book-d:2.4cqw] [--book-h:33cqw] [--book-w:22cqw]"
+                />
+              </div>
+            </Fragment>
+          )
+        }
+      </div>
+
+      <button
+        type="button"
+        data-video-play
+        aria-label={`Play video: ${video.title}`}
+        class="absolute inset-0 grid cursor-pointer place-items-center rounded-2xl focus-visible:outline-3 focus-visible:-outline-offset-4 focus-visible:outline-primary"
+      >
+        <span
+          class="grid size-16 place-items-center rounded-full bg-linear-to-b from-[#4db1f5] to-primary text-on-primary shadow-[0_14px_30px_-10px_rgb(59_166_241/0.8)] ring-8 ring-white/55 transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none sm:size-20"
+        >
+          <svg viewBox="0 0 16 16" class="ml-1 size-6 sm:size-7" fill="currentColor" aria-hidden="true">
+            <path d="M4.5 2.6v10.8a.6.6 0 0 0 .92.5l8.3-5.4a.6.6 0 0 0 0-1L5.42 2.1a.6.6 0 0 0-.92.5z"></path>
+          </svg>
+        </span>
+      </button>
+
+      <span
+        data-video-duration
+        class="pointer-events-none absolute right-3 bottom-3 rounded-full bg-main/75 px-2.5 py-1 text-xs font-semibold text-white tabular-nums sm:right-4 sm:bottom-4"
+      >
+        <span class="sr-only">Duration:</span>
+        {video.duration}
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+  for (const frame of document.querySelectorAll<HTMLElement>('[data-video]')) {
+    const { youtubeId, src, title = '' } = frame.dataset;
+
+    frame.querySelector('[data-video-play]')?.addEventListener('click', () => {
+      if (!youtubeId && !src) return; // no video set in book.ts yet
+
+      const player = youtubeId
+        ? Object.assign(document.createElement('iframe'), {
+            src: `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0`,
+            title,
+            allow: 'autoplay; encrypted-media; picture-in-picture; fullscreen',
+            allowFullscreen: true,
+          })
+        : Object.assign(document.createElement('video'), { src, controls: true, autoplay: true, playsInline: true });
+      player.className = 'absolute inset-0 size-full border-0 bg-black';
+
+      frame.querySelectorAll('[data-video-poster], [data-video-play], [data-video-duration]').forEach((el) => el.remove());
+      frame.append(player);
+      player.focus();
+    });
+  }
+</script>

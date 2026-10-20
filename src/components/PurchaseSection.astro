@@ -1,0 +1,93 @@
+---
+import type { Book, PurchaseContent } from '../data/book';
+import Book3D from './Book3D.astro';
+import Button from './Button.astro';
+import CheckIcon from './CheckIcon.astro';
+import CoverArt from './CoverArt.astro';
+import DeviceMockup from './DeviceMockup.astro';
+import PressLogos from './PressLogos.astro';
+import ReaderScreen from './ReaderScreen.astro';
+import SectionIntro from './SectionIntro.astro';
+import StarRating from './StarRating.astro';
+
+interface Props {
+  content: PurchaseContent;
+  /** For the cover on the product shots. */
+  book: Book;
+}
+
+const { content, book } = Astro.props;
+const { availability } = content;
+const cover = {
+  title: book.title,
+  titleLang: book.titleLang,
+  author: book.author,
+  cover: book.cover,
+  coverTitleLines: book.coverTitleLines,
+};
+// Placeholder ratings show five stars
+const stars = Math.round(Number.parseFloat(availability.rating)) || 5;
+const cardClass = 'group rounded-2xl border border-border bg-surface-secondary/60';
+---
+
+<section id="buy" aria-labelledby="buy-title" class="relative z-10 scroll-mt-8 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-28">
+  <div class="mx-auto max-w-page">
+    <SectionIntro id="buy-title" headline={content.heading} />
+
+    <!-- Purchase options -->
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
+      {
+        content.options.map((option) => (
+          <article class:list={[cardClass, 'flex flex-col items-center px-6 pt-10 pb-9 text-center sm:px-10']}>
+            <div class="relative flex h-56 w-full items-end justify-center sm:h-64">
+              {option.format === 'ebook' ? (
+                <Fragment>
+                  <DeviceMockup kind="tablet" class="w-36 sm:w-44">
+                    <CoverArt {...cover} />
+                  </DeviceMockup>
+                  <DeviceMockup kind="phone" class="absolute bottom-0 left-1/2 w-[4.5rem] -translate-x-[150%] sm:w-20">
+                    <ReaderScreen />
+                  </DeviceMockup>
+                </Fragment>
+              ) : (
+                <Book3D
+                  {...cover}
+                  class="mb-2 [--book-d:22px] [--book-h:204px] [--book-w:136px] sm:[--book-d:26px] sm:[--book-h:240px] sm:[--book-w:160px]"
+                />
+              )}
+            </div>
+            <h3 class="mt-8 text-2xl font-extrabold tracking-[-0.03em]">{option.heading}</h3>
+            <p class="mt-1 text-[15px] text-secondary">{option.details}</p>
+            <Button href={option.cta.href} class="mt-6 w-full max-w-xs">
+              {option.cta.label}
+            </Button>
+            {option.note && (
+              <p class="mt-4 flex items-center gap-1.5 text-sm text-secondary">
+                <CheckIcon class="size-4 text-muted" />
+                {option.note}
+              </p>
+            )}
+            {option.link && (
+              <a
+                href={option.link.href}
+                class="mt-4 text-sm font-semibold text-secondary underline decoration-border underline-offset-4 transition-colors hover:text-main hover:decoration-current"
+              >
+                {option.link.label}
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Where else to buy -->
+    <div class="mt-14 text-center">
+      <p class="text-[15px] text-secondary">{availability.label}</p>
+      <PressLogos outlets={availability.stores} class="mt-4 justify-center gap-x-8 gap-y-3 text-muted" />
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-secondary">
+        <StarRating rating={stars} decorative size="size-4" class="gap-0.5" />
+        <span>{availability.rating} · {availability.reviewCount} reviews</span>
+      </div>
+    </div>
+  </div>
+</section>

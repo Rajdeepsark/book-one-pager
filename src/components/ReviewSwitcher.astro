@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import type { Review } from '../data/book';
+import PressLogos from './PressLogos.astro';
+import StarRating from './StarRating.astro';
+
+interface Props {
+  reviews: Review[];
+  class?: string;
+}
+
+const { reviews, class: className } = Astro.props;
+const id = 'reviews';
+---
+
+<!-- One review at a time; the dots below switch between them. All panels share one grid cell so the card never changes height. -->
+<div data-review-switcher class={className}>
+  <div
+    class="grid rounded-3xl border border-border bg-surface px-6 py-12 text-center sm:px-14 sm:py-16"
+  >
+    {
+      reviews.map((review, i) => (
+        <figure
+          id={`${id}-panel-${i}`}
+          role="tabpanel"
+          aria-labelledby={`${id}-tab-${i}`}
+          data-review-panel
+          data-active={i === 0 ? 'true' : 'false'}
+          class="col-start-1 row-start-1 m-0 flex flex-col items-center transition-opacity duration-300 data-[active=false]:invisible data-[active=false]:opacity-0"
+        >
+          <StarRating rating={review.rating} class="gap-1" />
+          <blockquote class="mt-7 max-w-3xl text-[clamp(22px,2.6vw,32px)] leading-[1.3] font-bold tracking-[-0.03em] text-balance text-main">
+            <p>“{review.quote}”</p>
+          </blockquote>
+          <figcaption class="mt-9 flex flex-col items-center">
+            <div class="flex items-center gap-3.5 text-left">
+              {review.avatar ? (
+                <Image
+                  src={review.avatar}
+                  alt=""
+                  width={112}
+                  class="size-14 shrink-0 rounded-full object-cover shadow-[0_1px_3px_rgb(0_0_0/0.14)] ring-4 ring-white"
+                />
+              ) : (
+                <span
+                  aria-hidden="true"
+                  class="grid size-14 shrink-0 place-items-end overflow-hidden rounded-full bg-surface-secondary text-muted shadow-[0_1px_3px_rgb(0_0_0/0.14)] ring-4 ring-white"
+                >
+                  <svg viewBox="0 0 24 24" class="size-12" fill="currentColor">
+                    <circle cx="12" cy="9" r="4.4" />
+                    <path d="M2.8 24c.6-5.2 4.4-8.4 9.2-8.4s8.6 3.2 9.2 8.4z" />
+                  </svg>
+                </span>
+              )}
+              <div>
+                <span class="block font-bold text-main">{review.reviewer}</span>
+                <span class="mt-0.5 block text-sm text-secondary">{review.role}</span>
+              </div>
+            </div>
+            <PressLogos outlets={[review.outlet]} class="mt-6 justify-center text-muted" />
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+
+  <div role="tablist" aria-label="Reviews" class="mt-7 flex justify-center">
+    {
+      reviews.map((_, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${i}`}
+          aria-controls={`${id}-panel-${i}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-label={`Review ${i + 1} of ${reviews.length}`}
+          tabindex={i === 0 ? 0 : -1}
+          data-review-tab
+          class="group grid size-6 cursor-pointer place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          <span class="size-2.5 rounded-full bg-muted/45 transition-colors duration-200 group-hover:bg-muted group-aria-selected:bg-primary" />
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-review-switcher]')) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-review-tab]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-review-panel]')];
+
+    const select = (index: number, moveFocus = false) => {
+      tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        panels[i].dataset.active = String(active);
+      });
+      if (moveFocus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (event) => {
+        const last = tabs.length - 1;
+        const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[
+          event.key
+        ];
+        if (next === undefined) return;
+        event.preventDefault();
+        select(next, true);
+      });
+    });
+  }
+</script>

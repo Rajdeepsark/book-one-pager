@@ -1,0 +1,46 @@
+---
+import type { Chapter } from '../data/book';
+import Button from './Button.astro';
+
+interface Props {
+  heading: string;
+  ctaLabel: string;
+  ctaHref: string;
+  chapters: Chapter[];
+  class?: string;
+}
+
+const { heading, ctaLabel, ctaHref, chapters, class: className } = Astro.props;
+// Desktop fills the left column first, then the right
+const rows = Math.ceil(chapters.length / 2);
+---
+
+<div
+  id="contents"
+  class:list={[
+    'scroll-mt-8 rounded-2xl bg-surface-secondary/60 px-6 py-10 text-center sm:px-10 sm:py-12 md:text-left',
+    className,
+  ]}
+>
+  <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-5 md:justify-between">
+    <h3 class="text-2xl font-extrabold tracking-[-0.03em] sm:text-[28px]">{heading}</h3>
+    <Button href={ctaHref} variant="inverse">{ctaLabel}</Button>
+  </div>
+
+  <ol
+    class="mt-8 grid gap-x-14 md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(var(--rows),auto)]"
+    style={`--rows: ${rows}`}
+  >
+    {
+      chapters.map((chapter, i) => (
+        <li class="border-t border-border py-5">
+          <p class="text-xs font-bold tracking-eyebrow text-secondary uppercase">
+            Chapter {String(i + 1).padStart(2, '0')}
+          </p>
+          <p class="mt-1.5 text-lg leading-snug font-bold tracking-[-0.02em]">{chapter.title}</p>
+          {chapter.description && <p class="mt-1 text-sm leading-relaxed text-secondary">{chapter.description}</p>}
+        </li>
+      ))
+    }
+  </ol>
+</div>

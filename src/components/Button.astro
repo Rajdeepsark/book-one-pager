@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
+  /** `inverse` is for coloured panels. */
+  variant?: 'primary' | 'secondary' | 'inverse';
+};
+
+const { variant = 'primary', class: className, ...attrs } = Astro.props;
+
+// Renders a link when given an href, otherwise a button
+const Tag = 'href' in attrs ? 'a' : 'button';
+
+const variants = {
+  primary:
+    'border-primary-hover bg-linear-to-b from-[#4db1f5] to-primary text-on-primary shadow-primary hover:from-primary-hover hover:to-primary-hover',
+  secondary:
+    'border-border bg-linear-to-b from-[#eef0f3] to-surface-secondary text-secondary shadow-secondary hover:from-surface-secondary hover:to-[#dcdee3] hover:text-main',
+  inverse: 'border-white bg-white text-primary-deep shadow-secondary hover:bg-[#eef6fd] focus-visible:outline-white',
+};
+---
+
+<Tag
+  type={Tag === 'button' ? 'button' : undefined}
+  class:list={[
+    'inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-full border px-7 text-[15px] leading-none font-semibold tracking-[-0.01em] no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:min-w-44',
+    variants[variant],
+    className,
+  ]}
+  {...attrs}
+>
+  <slot />
+</Tag>

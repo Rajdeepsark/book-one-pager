@@ -1,0 +1,33 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/noto-sans-bengali';
+import '@fontsource-variable/lora';
+import '@fontsource-variable/lora/wght-italic.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: string;
+}
+
+const { title, description, lang = 'en' } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body
+    class="bg-background font-sans text-main antialiased before:pointer-events-none before:fixed before:inset-0 before:z-0 before:bg-grain before:opacity-50 before:mix-blend-multiply"
+  >
+    <slot />
+  </body>
+</html>

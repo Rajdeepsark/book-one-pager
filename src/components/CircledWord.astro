@@ -1,0 +1,18 @@
+---
+// Wraps a word in a loose, hand-drawn marker circle that stretches to fit it.
+---
+
+<span class="relative inline-block whitespace-nowrap">
+  <slot />
+  <svg
+    class="pointer-events-none absolute -top-[34%] -left-[16%] h-[168%] w-[132%] overflow-visible"
+    viewBox="0 0 120 60"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path
+      class="hand-stroke stroke-[2.4] opacity-90"
+      d="M10 36 C 6 16, 44 5, 74 7 C 104 9, 118 24, 112 40 C 105 55, 58 58, 30 52 C 10 47, 3 35, 13 23 C 22 14, 40 9, 60 10"
+    ></path>
+  </svg>
+</span>

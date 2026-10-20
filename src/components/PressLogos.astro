@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import type { PressOutlet } from '../data/book';
+
+interface Props {
+  outlets: PressOutlet[];
+  size?: 'sm' | 'lg';
+  class?: string;
+}
+
+const { outlets, size = 'sm', class: className } = Astro.props;
+
+// Logos share a height but wide mastheads are capped in width, so the row looks evenly weighted
+const logoBox = { sm: 'h-7 max-w-28', lg: 'h-8 max-w-40 sm:h-10 sm:max-w-52' };
+const logoPixels = { sm: 56, lg: 80 }; // 2× the box height for sharp screens
+
+// Varied type so [placeholder] names read as a logo strip
+const placeholderStyles = {
+  sm: [
+    'font-serif text-base font-bold tracking-[-0.02em]',
+    'text-xs font-extrabold tracking-[0.14em]',
+    'font-serif text-[17px] italic',
+    'text-[17px] font-extrabold tracking-[-0.05em]',
+  ],
+  lg: [
+    'font-serif text-xl font-bold tracking-[-0.02em] sm:text-[22px]',
+    'text-sm font-extrabold tracking-[0.14em] sm:text-[15px]',
+    'font-serif text-xl italic sm:text-[23px]',
+    'text-xl font-extrabold tracking-[-0.05em] sm:text-[23px]',
+  ],
+};
+---
+
+<ul class:list={['flex flex-wrap items-center', className]}>
+  {
+    outlets.map((outlet, i) => (
+      <li class="leading-none whitespace-nowrap">
+        {outlet.logo ? (
+          <Image
+            src={outlet.logo}
+            alt={outlet.name}
+            height={logoPixels[size]}
+            class={`w-auto object-contain mix-blend-multiply ${logoBox[size]}`}
+          />
+        ) : (
+          <span class={placeholderStyles[size][i % placeholderStyles[size].length]}>{outlet.name}</span>
+        )}
+      </li>
+    ))
+  }
+</ul>

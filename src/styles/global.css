@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  /* Below md (810px) content is centred; from md up it is left-aligned */
+  --breakpoint-md: 50.625rem;
+
+  /* One content width for every section (max-w-page) */
+  --container-page: 65rem;
+
+  /* Manrope for Latin; Noto Sans Bengali covers Assamese script (ৰ, ৱ) at matching weights */
+  --font-sans: "Manrope Variable", "Noto Sans Bengali Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  /* The author's letter */
+  --font-letter: "Lora Variable", "Noto Sans Bengali Variable", Georgia, serif;
+
+  /* Palette */
+  --color-primary: #3ba6f1; /* CTA */
+  --color-primary-hover: #3398e1;
+  --color-on-primary: #f8fafc;
+  --color-primary-deep: #1a75c9; /* blue panels with white text */  --color-background: #fafaf9;
+  --color-surface: #ffffff; /* cards */
+  --color-surface-secondary: #e5e7eb;
+  --color-main: #111111; /* main text */
+  --color-secondary: #78716c; /* secondary text */
+  --color-muted: #a8a29e;
+  --color-border: #d6d3d180;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-star: #f5b301;
+
+  /* Book + annotation materials */
+  --color-jacket: #f4f0e8;
+  --color-jacket-back: #e9e3d8;
+  --color-sticky-ink: #2b261e;
+
+  --tracking-display: -0.045em;
+  --tracking-eyebrow: 0.14em;
+
+  --shadow-primary: inset 0 1px 0 rgb(255 255 255 / 0.22), 0 1px 2px rgb(17 60 100 / 0.12);
+  --shadow-secondary: inset 0 1px 0 #ffffff, inset 0 -1px 0 rgb(0 0 0 / 0.03), 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-note:
+    0 1px 1px rgb(60 45 0 / 0.08), 0 6px 10px -4px rgb(60 45 0 / 0.14),
+    0 24px 32px -18px rgb(60 45 0 / 0.36);
+  --shadow-book: -6px 0 18px rgb(40 30 20 / 0.08), 24px 30px 60px -18px rgb(40 30 20 / 0.38);
+
+  --ease-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- Materials: textures with no single-utility equivalent ---------- */
+
+/* Fine paper grain (SVG noise) */
+@utility bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .25 0 0 0 .55 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Spine hinge + soft sheen on the front cover. Sits above the artwork, never alters it. */
+@utility cover-lighting {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.14) 0,
+      rgb(0 0 0 / 0.03) 1.2%,
+      rgb(255 255 255 / 0.5) 2.2%,
+      rgb(255 255 255 / 0) 3.6%,
+      rgb(0 0 0 / 0.05) 4.2%,
+      rgb(0 0 0 / 0) 6%
+    ),
+    linear-gradient(118deg, rgb(255 255 255 / 0.4) 0%, rgb(255 255 255 / 0) 36%, rgb(0 0 0 / 0) 72%, rgb(0 0 0 / 0.07) 100%);
+}
+
+/* Fore-edge: stacked page lines */
+@utility book-fore-edge {
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.04), rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0) 70%, rgb(0 0 0 / 0.16)),
+    linear-gradient(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0) 8%, rgb(0 0 0 / 0) 90%, rgb(0 0 0 / 0.08)),
+    repeating-linear-gradient(90deg, #fdfbf6 0 1.4px, #e4dccd 1.4px 2px);
+}
+
+/* Sticky note paper with its adhesive band */
+@utility sticky-paper {
+  background:
+    linear-gradient(rgb(150 110 0 / 0.08) 0 22px, rgb(0 0 0 / 0) 22px),
+    linear-gradient(170deg, #ffeb8e, #ffe780 45%, #fbdf6e);
+}
+
+/* Hand-drawn marker line for SVG annotations */
+@utility hand-stroke {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}

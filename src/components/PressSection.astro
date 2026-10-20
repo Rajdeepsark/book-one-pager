@@ -1,0 +1,35 @@
+---
+import type { PressCoverage } from '../data/book';
+import PressLogos from './PressLogos.astro';
+import ReviewSwitcher from './ReviewSwitcher.astro';
+import SectionIntro from './SectionIntro.astro';
+
+interface Props {
+  coverage: PressCoverage;
+}
+
+const { coverage } = Astro.props;
+---
+
+<section id="press" aria-labelledby="press-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+  <div class="mx-auto max-w-page">
+    <SectionIntro
+      id="press-title"
+      eyebrow={coverage.eyebrow}
+      headline={coverage.headline}      description={coverage.description}
+    />
+
+    <PressLogos
+      outlets={coverage.outlets}
+      size="lg"
+      class="mt-12 justify-center gap-x-10 gap-y-6 text-muted sm:gap-x-14"
+    />
+
+    <div class="mt-20 sm:mt-24">
+      <p class="mb-8 text-center text-xs font-bold tracking-eyebrow text-secondary uppercase">
+        {coverage.reviewsEyebrow}
+      </p>
+      <ReviewSwitcher reviews={coverage.reviews} />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+---
+import type { ImageMetadata } from 'astro';
+import Book3D from './Book3D.astro';
+import CircledWord from './CircledWord.astro';
+
+interface Props {
+  title: string;
+  titleLang?: string;
+  author: string;
+  cover?: ImageMetadata;
+  coverTitleLines: string[];
+  quote: { before: string; circled: string; after: string };
+}
+
+const { quote, ...book } = Astro.props;
+---
+
+<!-- Stage: soft light falling on the book; hovering turns the book slightly toward the viewer -->
+<div
+  class="group relative grid place-items-center pt-8 pb-12 before:pointer-events-none before:absolute before:-inset-x-[18%] before:-inset-y-[12%] before:bg-[radial-gradient(closest-side,rgb(255_255_255/0.95),rgb(255_255_255/0))]"
+>
+  <!-- Book size (w × h × depth) per breakpoint -->
+  <Book3D
+    {...book}
+    priority
+    class="[--book-d:26px] [--book-h:376px] [--book-w:250px] sm:[--book-d:30px] sm:[--book-h:450px] sm:[--book-w:300px] lg:[--book-d:34px] lg:[--book-h:516px] lg:[--book-w:344px] xl:[--book-d:40px] xl:[--book-h:606px] xl:[--book-w:404px]"
+  >
+    <!-- Annotations: a separate layer around the book -->
+    <svg
+      class="absolute -top-8.5 -right-8.5 size-11.5 overflow-visible xl:-top-10 xl:-right-11.5 xl:size-16"
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+    >
+      <path class="hand-stroke stroke-[3.4]" d="M6 50 C 12 40, 18 32, 26 22"></path>
+      <path class="hand-stroke stroke-[3.4]" d="M16 58 C 28 55, 40 53, 56 50"></path>
+      <path class="hand-stroke stroke-[3.4]" d="M2 36 C 1 26, 2 16, 4 6"></path>
+    </svg>
+
+    <figure
+      class="absolute right-[-34px] bottom-16 m-0 w-41 -rotate-4 px-4 pt-7 pb-5 shadow-note sticky-paper sm:right-[-48px] sm:bottom-24 sm:w-50 lg:right-[-60px] lg:bottom-28 lg:w-55 xl:right-[-72px] xl:bottom-32 xl:w-59 xl:px-5.5 xl:pt-8.5 xl:pb-6.5"
+    >
+      <blockquote
+        class="m-0 text-sm leading-[1.38] font-bold tracking-[-0.015em] text-sticky-ink sm:text-[15px] lg:text-base xl:text-[17px]"
+      >
+        {quote.before} <CircledWord>{quote.circled}</CircledWord>{quote.after}
+      </blockquote>
+    </figure>
+  </Book3D>
+</div>

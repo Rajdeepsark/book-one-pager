@@ -1,0 +1,164 @@
+---
+import { Image } from 'astro:assets';
+import type { AuthorContent } from '../data/book';
+import PressLogos from './PressLogos.astro';
+
+interface Props {
+  content: AuthorContent;
+  author: string;
+  bookTitle: string;
+}
+
+const { content, author, bookTitle } = Astro.props;
+const { credentials, letter } = content;
+
+// Splits text around the book title so it can be set in italics
+const aroundTitle = (text: string) => text.split(bookTitle);
+
+const labelClass = 'mb-3 text-[11px] font-bold tracking-eyebrow text-secondary uppercase';
+const paperClass = 'rounded-[3px] border border-[#e6e2dc] bg-white';
+---
+
+<section id="author" aria-labelledby="author-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+  <h2 id="author-title" class="sr-only">About the author</h2>
+
+  <div class="mx-auto grid max-w-page items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+    <!-- Author profile: factual -->
+    <div class="mx-auto w-full max-w-md text-center md:text-left lg:max-w-none">
+      <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-secondary/70">
+        {
+          content.portrait ? (
+            <Image
+              src={content.portrait}
+              alt={`Portrait of ${author}`}
+              widths={[340, 680]}
+              sizes="(min-width: 1024px) 340px, 448px"
+              class="size-full object-cover"
+            />
+          ) : (
+            <div aria-hidden="true" class="absolute inset-0 grid place-items-end justify-center text-muted/60">
+              <div class="absolute inset-0 bg-grain opacity-40 mix-blend-multiply" />
+              <svg viewBox="0 0 24 24" class="relative w-3/4" fill="currentColor">
+                <circle cx="12" cy="9" r="4.4" />
+                <path d="M2.8 24c.6-5.2 4.4-8.4 9.2-8.4s8.6 3.2 9.2 8.4z" />
+              </svg>
+              <span class="absolute top-5 left-5 text-[11px] font-bold tracking-eyebrow text-secondary uppercase">
+                [Author portrait]
+              </span>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mt-7 space-y-3 text-[15px] leading-relaxed text-secondary">
+        <p><strong class="font-bold text-main">{author}</strong> {content.intro}</p>
+        <p>{content.bio}</p>
+      </div>
+
+      <dl class="mt-8 space-y-7 border-t border-border pt-7">
+        <div>
+          <dt class={labelClass}>{credentials.workedWith.label}</dt>
+          <dd>
+            <PressLogos
+              outlets={credentials.workedWith.outlets}
+              class="justify-center gap-x-5 gap-y-3 text-muted md:justify-start"
+            />
+          </dd>
+        </div>
+        <div>
+          <dt class={labelClass}>{credentials.recognition.label}</dt>
+          <dd>
+            <ul class="flex flex-wrap justify-center gap-2 md:justify-start">
+              {
+                credentials.recognition.items.map((item) => (
+                  <li class="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-secondary">
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+          </dd>
+        </div>
+        <div>
+          <dt class={labelClass}>{credentials.featuredIn.label}</dt>
+          <dd>
+            <PressLogos
+              outlets={credentials.featuredIn.outlets}
+              class="justify-center gap-x-5 gap-y-3 text-muted md:justify-start"
+            />
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Letter: personal. A slightly turned sheet with offset sheets behind it; flat on small screens. -->
+    <div class="relative mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-none lg:pt-4">
+      <div
+        aria-hidden="true"
+        class:list={[paperClass, 'absolute inset-0 translate-x-2 translate-y-2 rotate-[1.4deg] shadow-[0_1px_2px_rgb(0_0_0/0.04)] sm:translate-x-3 sm:rotate-[2.4deg]']}
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class:list={[paperClass, 'absolute inset-0 -translate-x-1 translate-y-1 rotate-[-0.4deg] sm:-translate-x-2 sm:rotate-[0.6deg]']}
+      >
+      </div>
+
+      <article
+        aria-label={`A letter from ${author}`}
+        class:list={[
+          paperClass,
+          'relative overflow-hidden px-7 py-10 font-letter text-[17px] leading-[1.7] text-[#2a2826] shadow-[0_1px_2px_rgb(0_0_0/0.04),0_30px_60px_-34px_rgb(40_30_20/0.35)] sm:px-14 sm:py-16 sm:text-[19px] lg:-rotate-[1.2deg]',
+        ]}
+      >
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-grain opacity-25 mix-blend-multiply"></div>
+
+        <div class="relative space-y-5 sm:space-y-6">
+          <p>{letter.greeting}</p>
+          {
+            letter.paragraphs.map((paragraph) => (
+              <p>
+                {aroundTitle(paragraph).map((part, i) => (
+                  <Fragment>
+                    {i > 0 && <em>{bookTitle}</em>}
+                    {part}
+                  </Fragment>
+                ))}
+              </p>
+            ))
+          }
+          <p>{letter.signOff}</p>
+        </div>
+
+        <div class="relative mt-4">
+          {
+            letter.signature ? (
+              <Image
+                src={letter.signature}
+                alt={`Signature of ${author}`}
+                height={112}
+                class="h-14 w-auto mix-blend-multiply"
+              />
+            ) : (
+              <svg
+                viewBox="0 0 180 60"
+                class="h-14 w-auto overflow-visible"
+                role="img"
+                aria-label="[Handwritten signature]"
+              >
+                <path
+                  class="hand-stroke stroke-[2.2]"
+                  d="M6 44 C 18 12, 34 8, 30 34 C 27 52, 44 22, 54 26 C 62 29, 56 44, 66 40 C 76 35, 80 18, 92 22 C 101 25, 95 41, 108 37 C 124 32, 140 25, 172 27"
+                />
+              </svg>
+            )
+          }
+          <p class="mt-3 font-sans text-[15px] font-bold text-main">{author}</p>
+          <p class="font-sans text-sm text-secondary">
+            Author of <em class="font-letter">{bookTitle}</em>
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

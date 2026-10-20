@@ -1,0 +1,24 @@
+---
+interface Props {
+  /** Out of 5. */
+  rating: number;
+  /** Hide from screen readers when the rating is written out next to the stars. */
+  decorative?: boolean;
+  /** Size of each star. */
+  size?: string;
+  class?: string;
+}
+
+const { rating, decorative = false, size = 'size-5', class: className } = Astro.props;
+const a11y = decorative ? { 'aria-hidden': 'true' } : { role: 'img', 'aria-label': `Rated ${rating} out of 5` };
+---
+
+<div {...a11y} class:list={['flex text-star', className]}>
+  {
+    Array.from({ length: 5 }, (_, i) => (
+      <svg viewBox="0 0 20 20" class:list={[size, i >= Math.round(rating) && 'text-surface-secondary']} aria-hidden="true">
+        <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8L10 1.6z" />
+      </svg>
+    ))
+  }
+</div>
