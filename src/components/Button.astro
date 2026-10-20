@@ -21,15 +21,15 @@ const variants = {
   inverse: 'border-white bg-white text-primary-deep shadow-secondary hover:bg-[#eef6fd] focus-visible:outline-white',
 };
 const sizes = {
-  md: 'h-12 px-7 text-[15px] sm:min-w-44',
-  sm: 'h-10 px-5 text-sm',
+  md: 'h-12 px-5 text-[15px] sm:min-w-44 sm:px-7',
+  sm: 'h-10 px-4 text-sm sm:px-5',
 };
 ---
 
 <Tag
   type={Tag === 'button' ? 'button' : undefined}
   class:list={[
-    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border leading-none font-semibold tracking-[-0.01em] no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border leading-none whitespace-nowrap font-semibold tracking-[-0.01em] no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
     sizes[size],
     variants[variant],
     className,

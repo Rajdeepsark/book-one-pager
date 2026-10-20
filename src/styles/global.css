@@ -1,11 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  /* Below md (810px) content is centred; from md up it is left-aligned */
+  /* Layout rule: below md (810px) sections stack and centre; from md up they sit side by side, left-aligned */
   --breakpoint-md: 50.625rem;
 
   /* One content width for every section (max-w-page) */
   --container-page: 65rem;
+
+  /* Fluid scale: every value grows smoothly from a 360px phone to a ~1440px desktop, then stops */
+  --spacing-gutter: clamp(1.25rem, 0.5rem + 3.5vw, 3rem); /* page side margins: 20 → 48px */
+  --spacing-section: clamp(3.5rem, 2.5rem + 4vw, 6rem); /* section top/bottom: 56 → 96px */
+  --spacing-stack: clamp(2.5rem, 2rem + 2vw, 3.5rem); /* section heading → content: 40 → 56px */
+  --spacing-card: clamp(1.5rem, 1rem + 2vw, 2.5rem); /* card padding: 24 → 40px */
+  --spacing-card-lg: clamp(1.75rem, 1rem + 3vw, 3.5rem); /* roomy cards (review, letter): 28 → 56px */
+  --spacing-split: clamp(2.5rem, -1rem + 7vw, 6rem); /* gap between side-by-side columns: 40 → 96px */
+
+  --text-display: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem); /* hero headline: 36 → 56px */
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.04em;
+  --text-h2: clamp(1.875rem, 1.45rem + 1.6vw, 2.875rem); /* section headings: 30 → 46px */
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.04em;
+  --text-h3: clamp(1.375rem, 1.25rem + 0.5vw, 1.75rem); /* card headings: 22 → 28px */
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.03em;
+  --text-quote: clamp(1.375rem, 1.1rem + 1vw, 2rem); /* review quote: 22 → 32px */
+  --text-quote--line-height: 1.3;
+  --text-quote--letter-spacing: -0.03em;
+  --text-title: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); /* list items, chapter titles: 17 → 20px */
+  --text-title--line-height: 1.35;
+  --text-title--letter-spacing: -0.02em;
+  --text-lead: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem); /* intro paragraphs: 16 → 17px */
+  --text-lead--line-height: 1.65;
+  --text-letter: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); /* the author's letter: 17 → 19px */
+  --text-letter--line-height: 1.7;
 
   /* Manrope for Latin; Noto Sans Bengali covers Assamese script (ৰ, ৱ) at matching weights */
   --font-sans: "Manrope Variable", "Noto Sans Bengali Variable", ui-sans-serif, system-ui, sans-serif;
@@ -17,7 +45,8 @@
   --color-primary: #3ba6f1; /* CTA */
   --color-primary-hover: #3398e1;
   --color-on-primary: #f8fafc;
-  --color-primary-deep: #1a75c9; /* blue panels with white text */  --color-background: #fafaf9;
+  --color-primary-deep: #1a75c9; /* blue panels with white text */
+  --color-background: #fafaf9;
   --color-surface: #ffffff; /* cards */
   --color-surface-secondary: #e5e7eb;
   --color-main: #111111; /* main text */
@@ -44,6 +73,23 @@
   --shadow-book: -6px 0 18px rgb(40 30 20 / 0.08), 24px 30px 60px -18px rgb(40 30 20 / 0.38);
 
   --ease-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  /* The design is light-only: stop browsers' automatic dark modes from inverting it */
+  :root {
+    color-scheme: only light;
+  }
+}
+
+/* Small uppercase label above headings and groups */
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-secondary);
 }
 
 /* ---------- Materials: textures with no single-utility equivalent ---------- */

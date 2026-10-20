@@ -12,7 +12,7 @@ interface Props {
 const { content, previewUrl } = Astro.props;
 ---
 
-<section id="inside" aria-labelledby="inside-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+<section id="inside" aria-labelledby="inside-title" class="relative z-10 px-gutter py-section">
   <div class="mx-auto max-w-page">
     <!-- Takeaways: a narrow block, centred on the page -->
     <div class="mx-auto max-w-xl">
@@ -23,23 +23,23 @@ const { content, previewUrl } = Astro.props;
         headline={content.headline}
         description={content.description}
       />
-      <ul class="mx-auto mt-9 w-fit space-y-3.5 md:mx-0">
+      <ul class="mx-auto mt-8 w-fit space-y-3.5 md:mx-0">
         {
           content.takeaways.map((takeaway) => (
-            <li class="flex gap-3 text-lg leading-snug font-bold tracking-[-0.02em] sm:text-xl">
+            <li class="flex gap-3 text-title font-bold">
               <CheckIcon class="mt-[0.2em] size-5 text-muted" />
               {takeaway}
             </li>
           ))
         }
       </ul>
-      <p class="mt-6 text-center text-xl leading-snug font-extrabold tracking-[-0.02em] text-primary sm:text-[22px] md:text-left">
+      <p class="mt-6 text-center text-title font-extrabold text-primary md:text-left">
         {content.finalStatement}
       </p>
     </div>
 
     <TableOfContents
-      class="mt-16 sm:mt-20"
+      class="mt-section"
       heading={content.toc.heading}
       ctaLabel={content.toc.ctaLabel}
       ctaHref={previewUrl}

@@ -15,19 +15,18 @@ interface Props {
 const { quote, ...book } = Astro.props;
 ---
 
-<!-- Stage: soft light falling on the book; hovering turns the book slightly toward the viewer -->
+<!--
+  Stage: soft light falling on the book; hovering turns the book slightly toward the viewer.
+  One fluid width (--book-w) drives the book and every annotation: 220–300px stacked, then 28% of the
+  screen up to 404px side by side, where the stage also reserves room for the overhanging sticky note.
+-->
 <div
-  class="group relative grid place-items-center pt-8 pb-12 before:pointer-events-none before:absolute before:-inset-x-[18%] before:-inset-y-[12%] before:bg-[radial-gradient(closest-side,rgb(255_255_255/0.95),rgb(255_255_255/0))]"
+  class="group relative grid place-items-center pt-8 pb-12 [--book-w:clamp(13.75rem,55vw,18.75rem)] before:pointer-events-none before:absolute before:-inset-x-[18%] before:-inset-y-[12%] before:bg-[radial-gradient(closest-side,rgb(255_255_255/0.95),rgb(255_255_255/0))] md:pr-[calc(var(--book-w)_*_0.25_-_1.75rem)] md:[--book-w:clamp(14rem,28vw,25.25rem)]"
 >
-  <!-- Book size (w × h × depth) per breakpoint -->
-  <Book3D
-    {...book}
-    priority
-    class="[--book-d:26px] [--book-h:376px] [--book-w:250px] sm:[--book-d:30px] sm:[--book-h:450px] sm:[--book-w:300px] lg:[--book-d:34px] lg:[--book-h:516px] lg:[--book-w:344px] xl:[--book-d:40px] xl:[--book-h:606px] xl:[--book-w:404px]"
-  >
+  <Book3D {...book} priority>
     <!-- Annotations: a separate layer around the book -->
     <svg
-      class="absolute -top-8.5 -right-8.5 size-11.5 overflow-visible xl:-top-10 xl:-right-11.5 xl:size-16"
+      class="absolute -top-[calc(var(--book-w)_*_0.039_+_1.5rem)] -right-[calc(var(--book-w)_*_0.078_+_0.9rem)] size-[calc(var(--book-w)_*_0.117_+_1.05rem)] overflow-visible"
       viewBox="0 0 64 64"
       aria-hidden="true"
     >
@@ -37,10 +36,10 @@ const { quote, ...book } = Astro.props;
     </svg>
 
     <figure
-      class="absolute right-[-34px] bottom-16 m-0 w-41 -rotate-4 px-4 pt-7 pb-5 shadow-note sticky-paper sm:right-[-48px] sm:bottom-24 sm:w-50 lg:right-[-60px] lg:bottom-28 lg:w-55 xl:right-[-72px] xl:bottom-32 xl:w-59 xl:px-5.5 xl:pt-8.5 xl:pb-6.5"
+      class="absolute -right-[calc(var(--book-w)_*_0.25_-_1.75rem)] bottom-[calc(var(--book-w)_*_0.42_-_2.5rem)] m-0 w-[calc(var(--book-w)_*_0.5_+_2.5rem)] -rotate-4 px-[calc(var(--book-w)_*_0.04_+_0.375rem)] pt-[calc(var(--book-w)_*_0.04_+_1.125rem)] pb-[calc(var(--book-w)_*_0.04_+_0.625rem)] shadow-note sticky-paper"
     >
       <blockquote
-        class="m-0 text-sm leading-[1.38] font-bold tracking-[-0.015em] text-sticky-ink sm:text-[15px] lg:text-base xl:text-[17px]"
+        class="m-0 text-[length:calc(var(--book-w)_*_0.02_+_0.6rem)] leading-[1.38] font-bold tracking-[-0.015em] text-sticky-ink"
       >
         {quote.before} <CircledWord>{quote.circled}</CircledWord>{quote.after}
       </blockquote>

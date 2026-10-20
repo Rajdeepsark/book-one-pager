@@ -17,18 +17,13 @@ const centered = align === 'center';
 <header
   class:list={['mx-auto max-w-160 text-center', !centered && 'md:mx-0 md:max-w-none md:text-left', className]}
 >
-  {eyebrow && <p class="mb-5 text-xs font-bold tracking-eyebrow text-secondary uppercase">{eyebrow}</p>}
-  <h2 id={id} class="text-[clamp(32px,3.6vw,46px)] leading-[1.1] font-extrabold tracking-[-0.04em] text-balance">
+  {eyebrow && <p class="mb-5 eyebrow">{eyebrow}</p>}
+  <h2 id={id} class="text-h2 font-extrabold text-balance">
     {headline}
   </h2>
   {
     description && (
-      <p
-        class:list={[
-          'mx-auto mt-5 max-w-120 text-base leading-relaxed text-secondary sm:text-[17px]',
-          !centered && 'md:mx-0',
-        ]}
-      >
+      <p class:list={['mx-auto mt-5 max-w-120 text-lead text-secondary', !centered && 'md:mx-0']}>
         {description}
       </p>
     )

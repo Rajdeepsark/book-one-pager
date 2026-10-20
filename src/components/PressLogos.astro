@@ -11,7 +11,7 @@ interface Props {
 const { outlets, size = 'sm', class: className } = Astro.props;
 
 // Logos share a height but wide mastheads are capped in width, so the row looks evenly weighted
-const logoBox = { sm: 'h-7 max-w-28', lg: 'h-8 max-w-40 sm:h-10 sm:max-w-52' };
+const logoBox = { sm: 'h-7 max-w-28', lg: 'h-[clamp(2rem,1.6rem+1vw,2.5rem)] max-w-[clamp(10rem,7rem+8vw,13rem)]' };
 const logoPixels = { sm: 56, lg: 80 }; // 2× the box height for sharp screens
 
 // Varied type so [placeholder] names read as a logo strip

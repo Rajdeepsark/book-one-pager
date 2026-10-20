@@ -14,11 +14,11 @@ const { book } = Astro.props;
 <section
   id="top"
   aria-labelledby="book-title"
-  class="relative z-10 grid place-items-center overflow-x-clip px-5 pt-10 pb-24 sm:px-8 lg:px-12 lg:pt-14"
+  class="relative z-10 grid place-items-center overflow-x-clip px-gutter pt-[clamp(1.5rem,0.5rem+3vw,3.5rem)] pb-section"
 >
-  <!-- Desktop: the book column hugs the book; the gap leaves room for the sticky note overhanging it -->
+  <!-- From md: the book column hugs the book (it reserves room for the overhanging sticky note itself) -->
   <div
-    class="grid w-full max-w-page grid-cols-1 items-center gap-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-x-20 xl:gap-x-24"
+    class="grid w-full max-w-page grid-cols-1 items-center gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-x-[clamp(1.5rem,1rem+1.5vw,2.5rem)]"
   >
     <BookMockup
       title={book.title}
@@ -29,20 +29,20 @@ const { book } = Astro.props;
       quote={book.quote}
     />
 
-    <div class="mx-auto w-full max-w-140 text-center md:text-left lg:mx-0 lg:max-w-none">
-      <p class="mb-5.5 text-xs font-bold tracking-eyebrow text-secondary uppercase">{book.eyebrow}</p>
+    <div class="mx-auto w-full max-w-140 text-center md:mx-0 md:max-w-none md:text-left">
+      <p class="mb-5 eyebrow">{book.eyebrow}</p>
       <h1
         id="book-title"
         lang={book.headlineLang}
-        class="text-[clamp(40px,4vw,56px)] leading-[1.04] font-extrabold tracking-[-0.04em] text-balance [&:lang(as)]:leading-[1.2] [&:lang(as)]:tracking-[-0.01em]"
+        class="text-display font-extrabold text-balance [&:lang(as)]:leading-[1.2] [&:lang(as)]:tracking-[-0.01em]"
       >
         {book.headline}
       </h1>
-      <p class="mx-auto mt-6 max-w-110 text-base leading-relaxed tracking-[-0.005em] text-secondary sm:text-[17px] md:mx-0">
+      <p class="mx-auto mt-6 max-w-110 text-lead text-secondary md:mx-0">
         {book.description}
       </p>
 
-      <div class="mt-9.5 flex flex-wrap justify-center gap-3.5 md:justify-start">
+      <div class="mt-9 flex flex-wrap justify-center gap-3 md:justify-start">
         <Button href={book.primaryCta.href} class="flex-1 sm:flex-none">{book.primaryCta.label}</Button>
         <Button href={book.secondaryCta.href} variant="secondary" class="flex-1 sm:flex-none">
           {book.secondaryCta.label}

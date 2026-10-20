@@ -9,7 +9,7 @@ interface Props {
 const { content } = Astro.props;
 ---
 
-<section id="faq" aria-labelledby="faq-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-32">
+<section id="faq" aria-labelledby="faq-title" class="relative z-10 px-gutter py-section">
   <div class="mx-auto max-w-page">
     <SectionIntro
       id="faq-title"
@@ -20,11 +20,11 @@ const { content } = Astro.props;
 
     <!-- Native disclosure rows: work without JavaScript and answers are searchable with find-in-page -->
     <!-- One white card; dividers are inset from its edges and the last row has none -->
-    <div class="mx-auto mt-12 max-w-212 rounded-2xl border border-border bg-surface px-5 sm:mt-14 sm:px-6">
+    <div class="mx-auto mt-stack max-w-212 rounded-2xl border border-border bg-surface px-card">
       {
         content.items.map((item, i) => (
           <details open={i === 0} class="faq-item group border-b border-border last:border-0">
-            <summary class="flex cursor-pointer list-none items-center gap-4 rounded-sm py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:gap-5 [&::-webkit-details-marker]:hidden">
+            <summary class="flex cursor-pointer list-none items-center gap-5 rounded-sm py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
               <svg
                 viewBox="0 0 16 16"
                 class="size-4 shrink-0 text-muted transition-[rotate,color] duration-300 group-hover:text-secondary group-open:rotate-45 group-open:text-primary motion-reduce:transition-none"
@@ -36,9 +36,9 @@ const { content } = Astro.props;
               >
                 <path d="M8 1.5v13M1.5 8h13" />
               </svg>
-              <span class="text-[15px] leading-snug font-semibold tracking-[-0.01em] sm:text-base">{item.question}</span>
+              <span class="text-base leading-snug font-semibold tracking-[-0.01em]">{item.question}</span>
             </summary>
-            <p class="pb-5 pl-8 text-[15px] leading-relaxed text-secondary sm:pl-9">{item.answer}</p>
+            <p class="pb-5 pl-9 text-[15px] leading-relaxed text-secondary">{item.answer}</p>
           </details>
         ))
       }

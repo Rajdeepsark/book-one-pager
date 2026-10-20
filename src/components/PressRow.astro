@@ -12,6 +12,6 @@ const { label, outlets, class: className } = Astro.props;
 ---
 
 <div class:list={['border-t border-border pt-6', className]}>
-  <p class="mb-3.5 text-[11px] font-bold tracking-eyebrow text-secondary uppercase">{label}</p>
+  <p class="mb-3.5 eyebrow">{label}</p>
   <PressLogos outlets={outlets} class="justify-center gap-x-5 gap-y-3 text-muted md:justify-start" />
 </div>

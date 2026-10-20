@@ -28,33 +28,34 @@ const stars = Math.round(Number.parseFloat(rating.value)) || 5;
 const cardClass = 'group rounded-2xl border border-border bg-surface-secondary/60';
 ---
 
-<section id="buy" aria-labelledby="buy-title" class="relative z-10 px-5 pt-16 pb-24 sm:px-8 lg:px-12 lg:pt-20 lg:pb-28">
+<section id="buy" aria-labelledby="buy-title" class="relative z-10 px-gutter py-section">
   <div class="mx-auto max-w-page">
     <SectionIntro id="buy-title" headline={content.heading} />
 
     <!-- Purchase options -->
-    <div class="mt-12 grid gap-5 md:grid-cols-2">
+    <div class="mt-stack grid gap-5 md:grid-cols-2">
       {
         content.options.map((option) => (
-          <article class:list={[cardClass, 'flex flex-col items-center px-6 pt-10 pb-9 text-center sm:px-10']}>
-            <div class="relative flex h-56 w-full items-end justify-center sm:h-64">
+          <article class:list={[cardClass, 'flex flex-col items-center px-card pt-[calc(var(--spacing-card)_*_1.25)] pb-card text-center']}>
+            <!-- Product shot: one fluid height (--shot) sizes the devices and the book -->
+            <div class="relative flex h-(--shot) w-full items-end justify-center [--shot:clamp(13.5rem,11rem+6vw,16rem)]">
               {option.format === 'ebook' ? (
                 <Fragment>
-                  <DeviceMockup kind="tablet" class="w-36 sm:w-44">
+                  <DeviceMockup kind="tablet" class="w-[calc(var(--shot)_*_0.69)]">
                     <CoverArt {...cover} />
                   </DeviceMockup>
-                  <DeviceMockup kind="phone" class="absolute bottom-0 left-1/2 w-[4.5rem] -translate-x-[150%] sm:w-20">
+                  <DeviceMockup kind="phone" class="absolute bottom-0 left-1/2 w-[calc(var(--shot)_*_0.31)] -translate-x-[150%]">
                     <ReaderScreen />
                   </DeviceMockup>
                 </Fragment>
               ) : (
                 <Book3D
                   {...cover}
-                  class="mb-2 [--book-d:22px] [--book-h:204px] [--book-w:136px] sm:[--book-d:26px] sm:[--book-h:240px] sm:[--book-w:160px]"
+                  class="mb-2 [--book-d:calc(var(--book-w)_*_0.16)] [--book-w:calc(var(--shot)_*_0.625)]"
                 />
               )}
             </div>
-            <h3 class="mt-8 text-2xl font-extrabold tracking-[-0.03em]">{option.heading}</h3>
+            <h3 class="mt-7 text-h3 font-extrabold">{option.heading}</h3>
             <p class="mt-1 text-[15px] text-secondary">{option.details}</p>
             <!-- Several buttons stack while the card is narrow and sit side by side once there's room -->
             <div

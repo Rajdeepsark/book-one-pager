@@ -9,7 +9,7 @@ interface Props {
   cover?: ImageMetadata;
   /** Line breaks for the placeholder cover only. */
   coverTitleLines: string[];
-  /** Size the book with --book-w, --book-h and --book-d (depth). */
+  /** Size the book with --book-w; height (1.5×) and depth (0.1×) follow. Set --book-d to override the depth. */
   class?: string;
   /** Load the cover straight away, for a book above the fold. */
   priority?: boolean;
@@ -21,20 +21,20 @@ const { class: className, grounded = true, ...cover } = Astro.props;
 ---
 
 <!-- Turns slightly toward the viewer when an ancestor with the `group` class is hovered. Extra content (annotations) goes in the slot. -->
-<div class:list={['relative h-(--book-h) w-(--book-w) perspective-[2400px]', className]}>
+<div class:list={['relative h-(--bh) w-(--book-w) perspective-[2400px] [--bd:var(--book-d,calc(var(--book-w)*0.1))] [--bh:calc(var(--book-w)*1.5)]', className]}>
   <div
     class="absolute inset-0 -rotate-y-24 transition-transform duration-600 ease-settle transform-3d group-hover:-rotate-y-16 motion-reduce:transition-none"
   >
     <div
-      class="absolute inset-0 -translate-z-[calc(var(--book-d)/2)] rounded-l-[2px] rounded-r-[5px] bg-jacket-back shadow-book"
+      class="absolute inset-0 -translate-z-[calc(var(--bd)/2)] rounded-l-[2px] rounded-r-[5px] bg-jacket-back shadow-book"
     >
     </div>
     <div
-      class="absolute top-1 left-0 h-[calc(var(--book-h)-8px)] w-[calc(var(--book-d)-2px)] translate-x-[calc(var(--book-w)-var(--book-d)/2-3px)] rotate-y-90 book-fore-edge"
+      class="absolute top-1 left-0 h-[calc(var(--bh)-8px)] w-[calc(var(--bd)-2px)] translate-x-[calc(var(--book-w)-var(--bd)/2-3px)] rotate-y-90 book-fore-edge"
     >
     </div>
     <!-- Front cover, with spine hinge, sheen and paper grain on top -->
-    <div class="absolute inset-0 translate-z-[calc(var(--book-d)/2)] overflow-hidden rounded-l-[2px] rounded-r-[5px]">
+    <div class="absolute inset-0 translate-z-[calc(var(--bd)/2)] overflow-hidden rounded-l-[2px] rounded-r-[5px]">
       <CoverArt {...cover} />
       <div class="pointer-events-none absolute inset-0 cover-lighting"></div>
       <div class="pointer-events-none absolute inset-0 bg-grain opacity-30 mix-blend-multiply"></div>
@@ -44,7 +44,7 @@ const { class: className, grounded = true, ...cover } = Astro.props;
   {
     grounded && (
       <div
-        class="absolute -bottom-[calc(var(--book-h)*0.024)] left-[2%] right-[-4%] h-[calc(var(--book-h)*0.048)] -skew-x-20 bg-[radial-gradient(50%_50%_at_50%_50%,rgb(40_30_20/0.4),rgb(40_30_20/0))] blur-[3px]"
+        class="absolute -bottom-[calc(var(--bh)*0.024)] left-[2%] right-[-4%] h-[calc(var(--bh)*0.048)] -skew-x-20 bg-[radial-gradient(50%_50%_at_50%_50%,rgb(40_30_20/0.4),rgb(40_30_20/0))] blur-[3px]"
         aria-hidden="true"
       />
     )
