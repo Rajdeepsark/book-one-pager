@@ -27,8 +27,9 @@ const { title, description, lang = 'en' } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
   </head>
+  <!-- Body copy is Manrope Medium (500); headings, labels and buttons set their own heavier weights -->
   <body
-    class="overflow-x-clip bg-background font-sans text-main antialiased before:pointer-events-none before:fixed before:inset-0 before:z-0 before:bg-grain before:opacity-50 before:mix-blend-multiply"
+    class="overflow-x-clip bg-background font-sans font-medium text-main antialiased before:pointer-events-none before:fixed before:inset-0 before:z-0 before:bg-grain before:opacity-50 before:mix-blend-multiply"
   >
     <slot />
   </body>
